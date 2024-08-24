@@ -1,35 +1,26 @@
-version: "3.8" # Specify the version of Docker Compose
-
-services: # Define the services that make up your application
-  db: # The PostgreSQL database
-    image: postgres:13 # Use the official PostgreSQL image
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: startbuilder
+version: "3.9"
+services:
+  db:
+    image: postgres:15.4
     volumes:
-      - postgres_data:/var/lib/postgresql/data # Persist the data in a Docker volume
+      - ./postgres_db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: keycloak
     ports:
-      - "5432:5432" # Map port 5432 on the host to port 5432 in the container
-    networks:
-      - abc
-  keycloak: # keycloak
-    image: quay.io/keycloak/keycloak:25.0.4 # Use the official keycloak image
+      - 5432:5432
+  keycloak:
+    depends_on:
+      - db
+    image: quay.io/keycloak/keycloak:25.0.0
     environment:
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
       KC_DB: postgres
+      KC_DB_URL_HOST: db
+      KC_DB_URL_PORT: 5432
       KC_DB_USERNAME: postgres
       KC_DB_PASSWORD: postgres
-      KC_DB_PORT: 5432
-      KC_DB_HOST: abc
+    command: start-dev --verbose
     ports:
-      - "8080:8080"
-    networks:
-      - abc
-    command: start-dev --verbose # Start in development mode
-networks:
-  abc:
-    driver: bridge
-volumes: # Define volumes for data persistence
-  postgres_data:
+      - 8080:8080
