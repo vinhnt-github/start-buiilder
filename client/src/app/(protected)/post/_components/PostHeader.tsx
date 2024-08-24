@@ -8,7 +8,9 @@ import RouteBack from "@/components/RouteBack";
 import { useFormContext } from "react-hook-form";
 import { POST_STATUS } from "@/lib/constants";
 
-type Props = {};
+type Props = {
+  loading: boolean;
+};
 
 function PostHeader(props: Props) {
   const { register, setValue } = useFormContext();
@@ -33,7 +35,7 @@ function PostHeader(props: Props) {
             <FormLabel>Public</FormLabel>
           </Center>
           <Button variant={"primary"} type="submit">
-            Save
+            {props.loading ? "Saving" : "Save"}
           </Button>
         </Center>
       </Center>

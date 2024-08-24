@@ -3,42 +3,63 @@
 import Articletag from "@/components/article/Articletag";
 import { Editor } from "@/components/editor/Editor";
 import { Box, Container, Flex, Input, Wrap } from "@chakra-ui/react";
-import React from "react";
+import React, { FormEvent, useTransition } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import PostHeader from "./PostHeader";
 import TagPicker from "@/components/tag-picker/TagPicker";
+import { Tag } from "@/services/types";
+import usePostForm from "@/app/(protected)/post/_components/usePostForm";
 
-export default function PostForm() {
-  const methods = useForm();
+type Props = {
+  tags: Tag[];
+};
 
-  const onSubmit = (data: any) => {
-    console.log("data", data);
-  };
+export default function PostForm({ tags }: Props) {
+  const {
+    form,
+    formErrors,
+    pending,
+    formRef,
+    startFormTransition,
+    formAction,
+  } = usePostForm();
+
   const editorChange = (value: string) => {
-    methods.setValue("body-marklang", value);
+    form.setValue("body-marklang", value);
   };
+
   return (
-    <FormProvider {...methods}>
-      <form onSubmit={methods.handleSubmit(onSubmit)}>
-        <input type="hidden" {...methods.register("body-marklang")} />
-        <PostHeader />
+    <FormProvider {...form}>
+      <form
+        ref={formRef}
+        action={formAction}
+        onSubmit={async (event: React.FormEvent) => {
+          event.preventDefault();
+          form.handleSubmit((data) => {
+            startFormTransition(async () => {
+              await formAction(new FormData(formRef.current!));
+            });
+          })(event);
+        }}
+      >
+        <input type="hidden" {...form.register("body-marklang")} />
+        <input type="hidden" {...form.register("tags")} />
+        <input type="hidden" {...form.register("slug")} />
+        <PostHeader loading={pending} />
         <Container>
           <Box mt={4}>
-            <Input placeholder="Enter post title!"></Input>
+            <Input
+              {...form.register("title")}
+              placeholder="Enter post title!"
+              isInvalid={Boolean(formErrors.title)}
+            ></Input>
           </Box>
-          <Flex>
-            <TagPicker />
-          </Flex>
-          <Wrap my={4} justify={"flex-end"}>
-            <Articletag text="hahah"></Articletag>
-            <Articletag text="hahah"></Articletag>
-            <Articletag text="hahah"></Articletag>
-            <Articletag text="hahah"></Articletag>
-            <Articletag text="hahah"></Articletag>
-            <Articletag text="hahah"></Articletag>
-            <Articletag text="hahah"></Articletag>
-            <Articletag text="hahah"></Articletag>
-          </Wrap>
+          <TagPicker
+            options={tags}
+            onChangeTagSelected={(tagsSlected) => {
+              form.setValue("tags", tagsSlected.map(({ id }) => id).join(","));
+            }}
+          />
           <Editor value="hahahah" onChange={editorChange} />
         </Container>
       </form>

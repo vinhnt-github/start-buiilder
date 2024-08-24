@@ -21,6 +21,7 @@ export type Article = {
   publication: string;
   published_at: string;
   user: User;
+  tag: Tag[];
 };
 
 export type Flag = "Yes" | "No";
@@ -29,13 +30,7 @@ export type Tag = {
   id: number;
   name: string;
   displayName: string;
-  taggingsCount: number;
-  color: string;
-  image: string;
-  description: string;
   deleteFlg: Flag;
-  createdBy: string;
-  createdAt: string;
-  updatedBy: string;
-  updatedAt: string;
 };
+
+export type PostsDetail = any;

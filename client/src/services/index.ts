@@ -1,7 +1,7 @@
 export const apiPath = (url: string) =>
   `${process.env.NEXT_PUBLIC_URL_API}${url}`;
 
-class FetchErr extends Error {
+export class FetchErr extends Error {
   statusCode: number;
   message: string;
   constructor(statusCode: number, message: string) {

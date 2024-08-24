@@ -4,6 +4,6 @@ import PostForm from "../_components/PostForm";
 import { getAllTag } from "@/services/tag";
 
 export default async function NewPost() {
-  const tag = await getAllTag();
-  return <PostForm />;
+  const tagsResponse = await getAllTag();
+  return <PostForm tags={tagsResponse.data} />;
 }

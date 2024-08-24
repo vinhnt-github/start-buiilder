@@ -10,7 +10,7 @@ type Props = {
 export default function ArticleList({ articles, children }: Props) {
   return (
     <Grid templateColumns="repeat(2, 1fr)" gap={10}>
-      {articles.map((article, index) => {
+      {articles?.map((article, index) => {
         return <GridItem key={index}>{children(article)}</GridItem>;
       })}
     </Grid>
