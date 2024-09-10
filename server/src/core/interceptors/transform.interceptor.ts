@@ -1,12 +1,11 @@
 import {
+  CallHandler,
+  ExecutionContext,
   Injectable,
   NestInterceptor,
-  ExecutionContext,
-  CallHandler,
-  HttpException,
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 export interface Response<T> {
   statusCode: number;
@@ -21,7 +20,9 @@ export class TransformInterceptor<T>
     context: ExecutionContext,
     next: CallHandler,
   ): Observable<Response<T>> {
+    // logic before router handle called
     return next.handle().pipe(
+      // logic after router handle called and response to client
       map((data) => ({
         statusCode: context.switchToHttp().getResponse().statusCode,
         data,

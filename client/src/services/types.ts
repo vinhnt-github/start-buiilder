@@ -1,10 +1,13 @@
 export type PostStatus = "DRAFT" | "PUBLISHED" | "DELETED";
 
-export type User = {
-  id: string;
-  name: string;
+export type Users = {
+  id: number;
+  email: string;
   username: string;
-  vatar_small_url: string;
+  givenName: string;
+  familyName: string;
+  avatar?: string;
+  description?: string;
 };
 
 export type Article = {
@@ -20,7 +23,7 @@ export type Article = {
   pinned: string;
   publication: string;
   published_at: string;
-  user: User;
+  user: Users;
   tag: Tag[];
 };
 

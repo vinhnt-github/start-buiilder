@@ -1,17 +1,18 @@
+import { RequestUser } from '@/core/decorator/request-user.decorator';
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
   UseInterceptors,
 } from '@nestjs/common';
-import { PostService } from './post.service';
-import { CreatePostDto } from './dto/create-post.dto';
-import { UpdatePostDto } from './dto/update-post.dto';
 import { TransformInterceptor } from 'src/core/interceptors/transform.interceptor';
+import { PostDto } from './dto/create-post.dto';
+import { UpdatePostDto } from './dto/update-post.dto';
+import { PostService } from './post.service';
 
 @Controller('post')
 export class PostController {
@@ -24,8 +25,8 @@ export class PostController {
   }
 
   @Post('new')
-  create(@Body() createPostDto: CreatePostDto) {
-    return this.postService.create(createPostDto);
+  create(@RequestUser() userId: number, @Body() createPostDto: PostDto) {
+    return this.postService.create(userId, createPostDto);
   }
 
   @Get(':id')

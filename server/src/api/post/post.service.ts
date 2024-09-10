@@ -1,37 +1,62 @@
-import { HttpException, Injectable } from '@nestjs/common';
-import { CreatePostDto } from './dto/create-post.dto';
+import { DrizzleService } from '@/core/database/drizzle.service';
+import { posts } from '@/core/database/schema/post.schema';
+import { tagToPost } from '@/core/database/schema/tagsToPosts.schema';
+import { generateRandomString } from '@/core/utils/fns';
+import { Injectable } from '@nestjs/common';
+import slugify from 'slugify';
+import { MarkdownService } from '../markdown/markdown.service';
 import { UpdatePostDto } from './dto/update-post.dto';
 
 @Injectable()
 export class PostService {
-  create(createPostDto: CreatePostDto) {
-    throw new HttpException('some errors occurred!', 500);
+  constructor(
+    private readonly drizzleService: DrizzleService,
+    private readonly markdownService: MarkdownService,
+  ) {}
+
+  private convertTitleToPath(title: string): string {
+    return slugify(title, {
+      replacement: '-', // replace spaces with replacement character, defaults to `-`
+      lower: true, // convert to lower case, defaults to `false`
+      locale: 'vi', // language code of the locale to use
+    });
+    return title;
+  }
+
+  async create(userId, { tags, ...newPost }) {
+    const path = this.convertTitleToPath(newPost.title);
+    const bodyHtml = this.markdownService.generate(newPost.bodyMarkdown);
+    const slug = generateRandomString(12);
+
+    //insert post
+    const [{ postId }] = await this.drizzleService.db
+      .insert(posts)
+      .values({
+        title: newPost.title,
+        bodyMarkdown: newPost.bodyMarkdown,
+        bodyHtml,
+        slug,
+        path,
+        status: newPost.status,
+        authorId: userId,
+        createdBy: userId,
+        updatedBy: userId,
+      })
+      .returning({ postId: posts.id });
+
+    //insert post-to-tag
+    if (tags && tags.length > 0) {
+      this.drizzleService.db.insert(tagToPost).values(
+        tags.map((tagId) => ({
+          tagId,
+          postId,
+        })),
+      );
+    }
   }
 
   findAll() {
-    const article = Array.from({ length: 10 }).map((v, i) => ({
-      id: i,
-      slug: `slug-${i}`,
-      title: `title-${i}`,
-      article_type: 'blog',
-      body_letters_count: '100',
-      body_updated_at: new Date().toString(),
-      comments_count: '10',
-      emoji: '🤣',
-      liked_count: '12',
-      pinned: 'true',
-      publication: 'PUBLIC',
-      published_at: new Date().toString(),
-      user: {},
-      tag: [
-        {
-          id: i,
-          name: `tag-${i}`,
-          displayName: `tag ${i}`,
-        },
-      ],
-    }));
-    return article;
+    return;
   }
 
   findOne(id: number) {
