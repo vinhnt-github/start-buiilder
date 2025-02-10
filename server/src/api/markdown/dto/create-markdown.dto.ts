@@ -1,3 +1,3 @@
-export class MarkdownDto {
+export interface MarkdownDto {
   markdownContent: string;
 }

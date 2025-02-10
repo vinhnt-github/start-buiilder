@@ -7,6 +7,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   UseInterceptors,
 } from '@nestjs/common';
 import { TransformInterceptor } from 'src/core/interceptors/transform.interceptor';
@@ -20,8 +21,8 @@ export class PostController {
 
   @UseInterceptors(TransformInterceptor)
   @Get()
-  findAll() {
-    return this.postService.findAll();
+  findAll(@Query() query: any) {
+    return this.postService.findAll(query);
   }
 
   @Post('new')
