@@ -1,5 +1,4 @@
 import { IsPublic } from '@/core/decorator/public.decorator';
-import { TransformInterceptor } from '@/core/interceptors/transform.interceptor';
 import {
   Body,
   Controller,
@@ -7,22 +6,21 @@ import {
   HttpException,
   HttpStatus,
   Post,
-  UseInterceptors,
+  Query,
 } from '@nestjs/common';
 import { PostUserDto } from './dto/create-user.dto';
 import { UserService } from './user.service';
 
-@UseInterceptors(TransformInterceptor)
+@IsPublic()
 @Controller('user')
 export class UserController {
   constructor(private userService: UserService) {}
 
   @Get()
-  getAll() {
-    return this.userService.getAll();
+  getAll(@Query() q: { email: string }) {
+    return this.userService.getAll(q);
   }
 
-  @IsPublic()
   @Post()
   async createUser(@Body() userDto: PostUserDto) {
     try {

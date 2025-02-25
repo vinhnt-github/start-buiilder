@@ -1,8 +1,18 @@
 import { fetcher } from "@/services";
 import { ParseOptions } from "querystring";
+import { Article } from "../types";
 
 export const getAllArticle = async (param?: ParseOptions) => {
-  return fetcher("/post", {
+  return fetcher<Article[]>("/post", {
+    method: "GET",
+  });
+};
+
+export const getArticleByTag = async (
+  tagName: string,
+  param?: ParseOptions
+) => {
+  return fetcher(`/explore/tag/${tagName}`, {
     method: "GET",
   });
 };
@@ -18,4 +28,10 @@ export const postNewArticle = async (data: any) => {
 
 export const putEditArticleBySlug = async (data: any) => {
   console.log("data", data);
+};
+
+export const getArticleBySlug = async (slug: string, param?: ParseOptions) => {
+  return fetcher(`/post/${slug}`, {
+    method: "GET",
+  });
 };

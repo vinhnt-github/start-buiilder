@@ -1,9 +1,13 @@
 import { DrizzleService } from '@/core/database/drizzle.service';
 import { posts } from '@/core/database/schema/post.schema';
+import { tags } from '@/core/database/schema/tag.schema';
 import { tagToPost } from '@/core/database/schema/tagsToPosts.schema';
 import { PostStatus } from '@/core/database/schema/type';
+import { users } from '@/core/database/schema/user.schema';
 import { generateRandomString } from '@/core/utils/fns';
+import { queryWithPagination } from '@/core/utils/with-pagination';
 import { HttpException, Injectable } from '@nestjs/common';
+import { eq, ilike, sql } from 'drizzle-orm';
 import slugify from 'slugify';
 import { MarkdownService } from '../markdown/markdown.service';
 import { UpdatePostDto } from './dto/update-post.dto';
@@ -72,61 +76,60 @@ export class PostService {
 
   async findAll(query) {
     const { q, author, page = 1, pageSize = 10, tag, tagName } = query;
-    // const queryBuilder = this.drizzleService.db
-    //   .select({
-    //     id: posts.id,
-    //     type: posts.type,
-    //     title: posts.title,
-    //     emoji: posts.emoji,
-    //     bodyMarkdown: posts.bodyMarkdown,
-    //     bodyHtml: posts.bodyHtml,
-    //     slug: posts.slug,
-    //     status: posts.status,
-    //     pinned: posts.pinned,
-    //     createdBy: {
-    //       id: users.id,
-    //       email: users.email,
-    //       username: users.username,
-    //       avatar: users.avatar,
-    //     },
-    //   })
-    //   .from(posts)
-    //   .innerJoin(users, eq(posts.createdBy, users.id))
-    //   .innerJoin(tagToPost, eq(posts.id, tagToPost.postId))
-    //   .innerJoin(tags, eq(tagToPost.tagId, tags.id))
-    //   .$dynamic();
-    // if (q) {
-    //   queryBuilder.where(ilike(posts.title, `%${q}%`));
-    // }
-
-    // if (author) {
-    //   queryBuilder.where(eq(posts.authorId, author));
-    // }
-
-    // if (tagName) {
-    //   queryBuilder.where(eq(posts.authorId, author));
-    // }
-    // queryWithPagination(queryBuilder, page, pageSize);
-
-    // const articles = await queryBuilder.execute();
-    const articles = await this.drizzleService.db.query.posts.findMany({
-      with: {
-        tagsToPosts: {
-          with: {
-            tags: true,
-          },
+    const queryBuilder = this.drizzleService.db
+      .select({
+        id: posts.id,
+        type: posts.type,
+        title: posts.title,
+        emoji: posts.emoji,
+        bodyMarkdown: posts.bodyMarkdown,
+        bodyHtml: posts.bodyHtml,
+        slug: posts.slug,
+        status: posts.status,
+        pinned: posts.pinned,
+        publishedAt: posts.publishedAt,
+        createdBy: {
+          id: users.id,
+          email: users.email,
+          username: users.username,
+          avatar: users.avatar,
         },
-      },
-    });
+        tags: sql`array_agg(json_build_object('id', tags.id,'name', tags.name, 'displayName', tags.display_name))`.as(
+          'tags',
+        ),
+      })
+      .from(posts)
+      .innerJoin(users, eq(posts.createdBy, users.id))
+      .innerJoin(tagToPost, eq(posts.id, tagToPost.postId))
+      .innerJoin(tags, eq(tagToPost.tagId, tags.id))
+      .groupBy(posts.id, users.id)
+      .$dynamic();
+    if (q) {
+      queryBuilder.where(ilike(posts.title, `%${q}%`));
+    }
 
-    return {
-      articles,
-      page,
-    };
+    if (author) {
+      queryBuilder.where(eq(posts.authorId, author));
+    }
+
+    if (tagName) {
+      queryBuilder.where(eq(tags.name, tagName));
+    }
+
+    queryWithPagination(queryBuilder, page, pageSize);
+
+    const articles = await queryBuilder.execute();
+
+    return articles;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} post`;
+  async findOneBySlug(slug: string) {
+    const post = await this.drizzleService.db
+      .select()
+      .from(posts)
+      .where(eq(posts.slug, slug))
+      .execute();
+    return post[0];
   }
 
   update(id: number, updatePostDto: UpdatePostDto) {

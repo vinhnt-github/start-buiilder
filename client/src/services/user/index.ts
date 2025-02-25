@@ -10,9 +10,7 @@ export const findUserByEmail = (email: string) => {
 type NewUserPost = Partial<Pick<Users, "email" | "givenName" | "familyName">>;
 type PostNewUserResponse = FetchResponse<Users>;
 
-export const postNewUser = (
-  data: NewUserPost
-): Promise<PostNewUserResponse> => {
+export const postNewUser = (data: NewUserPost) => {
   return fetcher(`/user`, {
     headers: {
       "Content-Type": "application/json",

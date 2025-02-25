@@ -1,19 +1,12 @@
-import { createPostAction } from "./action";
-import {
-  RefObject,
-  useActionState,
-  useEffect,
-  useRef,
-  useTransition,
-} from "react";
-import { useFormState } from "react-dom";
-import { initialFormState } from "./state";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { PostPayload, postSchema } from "./schema";
 import useToast from "@/lib/hooks/useToast";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { redirect } from "next/navigation";
+import { useEffect, useRef, useTransition } from "react";
+import { useFormState } from "react-dom";
+import { useForm } from "react-hook-form";
+import { createPostAction } from "./action";
+import { postSchema } from "./schema";
+import { initialFormState } from "./state";
 
 const usePostForm = () => {
   const toast = useToast();
@@ -36,14 +29,15 @@ const usePostForm = () => {
   } = form;
 
   useEffect(() => {
-    //handle validate from client
+    // Handle validation errors from the client
     if (formErrors.title) {
       toast.error({ message: formErrors.title.message as string });
     }
   }, [form, formErrors]);
 
+  console.log("error", error);
   useEffect(() => {
-    //handle when call api success
+    //handle API call success
     if (updatedAt && message) {
       toast.success({ message });
       if (action === "NEW") {

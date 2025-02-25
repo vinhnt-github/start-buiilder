@@ -1,7 +1,8 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { APP_FILTER, APP_GUARD, APP_PIPE } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 import * as Joi from 'joi';
+import { ExploreModule } from './api/explore/explore.module';
 import { MarkdownModule } from './api/markdown/markdown.module';
 import { PostModule } from './api/post/post.module';
 import { TagModule } from './api/tag/tag.module';
@@ -11,10 +12,17 @@ import { AppService } from './app.service';
 import { DatabaseModule } from './core/database/database.module';
 import { HttpExceptionFilter } from './core/filters/http-exception.filter';
 import { AuthGuard } from './core/guards/AuthGuard';
+import { TransformInterceptor } from './core/interceptors/transform.interceptor';
 import { logger } from './core/middlewares/comming-request-logging';
 import { AppValidationPipe } from './core/pipe/AppValidation.pipe';
 
-const apiModule = [TagModule, PostModule, UserModule, MarkdownModule];
+const apiModule = [
+  TagModule,
+  PostModule,
+  UserModule,
+  MarkdownModule,
+  ExploreModule,
+];
 
 @Module({
   imports: [
@@ -51,6 +59,10 @@ const apiModule = [TagModule, PostModule, UserModule, MarkdownModule];
     {
       provide: APP_PIPE,
       useClass: AppValidationPipe,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: TransformInterceptor,
     },
 
     // TODO:

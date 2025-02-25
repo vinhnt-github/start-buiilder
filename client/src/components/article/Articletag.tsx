@@ -4,12 +4,7 @@ import { Tag as TagProps } from "@/services/types";
 import { CloseIcon } from "@chakra-ui/icons";
 import { Button, Center, Tag } from "@chakra-ui/react";
 import Link from "next/link";
-import React, {
-  ButtonHTMLAttributes,
-  MouseEvent,
-  MouseEventHandler,
-  ReactEventHandler,
-} from "react";
+import { MouseEvent } from "react";
 import styles from "./styles.module.css";
 
 type Props = {
@@ -28,6 +23,8 @@ export default function Articletag({ tag, onRemoveTag, ...props }: Props) {
       className={styles.tag}
       pr={onRemoveTag && "15px"}
       position={"relative"}
+      bg={tag.color}
+      color={"white"}
     >
       {onRemoveTag ? (
         <>
@@ -44,7 +41,7 @@ export default function Articletag({ tag, onRemoveTag, ...props }: Props) {
           </Button>
         </>
       ) : (
-        <Link href={"/tags/1"} className={styles.content}>
+        <Link href={`/explore/${tag.name}`} className={styles.content}>
           {tag.displayName}
         </Link>
       )}

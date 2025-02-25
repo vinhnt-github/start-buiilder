@@ -1,12 +1,12 @@
 "use server";
 
-import { z } from "zod";
-import { postNewArticle, putEditArticleBySlug } from "@/services/article";
-import { PostPayload, postSchema } from "./schema";
-import { FormSate, POST_ACTION, handleError, handleSuccess } from "./state";
-import { transformFieldError } from "@/lib/fns";
 import { ERRORS } from "@/lib/constants";
+import { transformFieldError } from "@/lib/fns";
 import { FetchErr } from "@/services";
+import { postNewArticle, putEditArticleBySlug } from "@/services/article";
+import { z } from "zod";
+import { postSchema } from "./schema";
+import { FormSate, POST_ACTION, handleError, handleSuccess } from "./state";
 export async function createPostAction(
   prevState: FormSate,
   formData: FormData
@@ -23,19 +23,13 @@ export async function createPostAction(
     } else {
       response = await postNewArticle({ ...payload });
     }
-    if (response instanceof FetchErr) {
-      return handleError(prevState, {
-        message: response.message,
-        status: response.statusCode,
-      });
-    }
     return handleSuccess(
       prevState,
       `Article was ${isEdit ? "updated" : "created"} successfully`
     );
   } catch (err) {
     if (err instanceof FetchErr) {
-      handleError(prevState, {
+      return handleError(prevState, {
         message: err.message,
         status: err.statusCode,
       });

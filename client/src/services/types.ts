@@ -14,17 +14,17 @@ export type Article = {
   id: string;
   slug: string;
   title: string;
-  article_type: string;
-  body_letters_count: string;
-  body_updated_at: string;
-  comments_count: string;
+  articleType: string;
+  bodyLettersCount: string;
+  bodyUpdatedAt: string;
+  commentsCount: string;
   emoji: string;
-  liked_count: string;
+  likedCount: string;
   pinned: string;
   publication: string;
-  published_at: string;
+  publishedAt: string;
   user: Users;
-  tag: Tag[];
+  tags: Tag[];
 };
 
 export type Flag = "Yes" | "No";
@@ -34,6 +34,7 @@ export type Tag = {
   name: string;
   displayName: string;
   deleteFlg: Flag;
+  color: string;
 };
 
 export type PostsDetail = any;

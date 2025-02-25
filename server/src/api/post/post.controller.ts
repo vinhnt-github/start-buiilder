@@ -1,3 +1,4 @@
+import { IsPublic } from '@/core/decorator/public.decorator';
 import { RequestUser } from '@/core/decorator/request-user.decorator';
 import {
   Body,
@@ -8,9 +9,7 @@ import {
   Patch,
   Post,
   Query,
-  UseInterceptors,
 } from '@nestjs/common';
-import { TransformInterceptor } from 'src/core/interceptors/transform.interceptor';
 import { PostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { PostService } from './post.service';
@@ -19,7 +18,7 @@ import { PostService } from './post.service';
 export class PostController {
   constructor(private readonly postService: PostService) {}
 
-  @UseInterceptors(TransformInterceptor)
+  @IsPublic()
   @Get()
   findAll(@Query() query: any) {
     return this.postService.findAll(query);
@@ -30,9 +29,9 @@ export class PostController {
     return this.postService.create(userId, createPostDto);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.postService.findOne(+id);
+  @Get(':slug')
+  findOne(@Param('slug') slug: string) {
+    return this.postService.findOneBySlug(slug);
   }
 
   @Patch(':id')

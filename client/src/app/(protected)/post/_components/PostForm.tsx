@@ -1,14 +1,13 @@
 "use client";
 
-import Articletag from "@/components/article/Articletag";
+import usePostForm from "@/app/(protected)/post/_components/usePostForm";
 import { Editor } from "@/components/editor/Editor";
-import { Box, Container, Flex, Input, Wrap } from "@chakra-ui/react";
-import React, { FormEvent, useTransition } from "react";
-import { FormProvider, useForm } from "react-hook-form";
-import PostHeader from "./PostHeader";
 import TagPicker from "@/components/tag-picker/TagPicker";
 import { Tag } from "@/services/types";
-import usePostForm from "@/app/(protected)/post/_components/usePostForm";
+import { Box, Container, Input } from "@chakra-ui/react";
+import React from "react";
+import { FormProvider } from "react-hook-form";
+import PostHeader from "./PostHeader";
 
 type Props = {
   tags: Tag[];
@@ -54,12 +53,17 @@ export default function PostForm({ tags }: Props) {
               isInvalid={Boolean(formErrors.title)}
             ></Input>
           </Box>
-          <TagPicker
-            options={tags}
-            onChangeTagSelected={(tagsSlected) => {
-              form.setValue("tags", tagsSlected.map(({ id }) => id).join(","));
-            }}
-          />
+          <Box my={4}>
+            <TagPicker
+              options={tags}
+              onChangeTagSelected={(tagsSlected) => {
+                form.setValue(
+                  "tags",
+                  tagsSlected.map(({ id }) => id).join(",")
+                );
+              }}
+            />
+          </Box>
           <Editor value="hahahah" onChange={editorChange} />
         </Container>
       </form>

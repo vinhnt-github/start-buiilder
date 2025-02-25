@@ -7,13 +7,7 @@ import {
   Button,
   Center,
   Circle,
-  Flex,
   FocusLock,
-  Input,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
   Popover,
   PopoverBody,
   PopoverContent,
@@ -21,7 +15,9 @@ import {
   Wrap,
   useDisclosure,
 } from "@chakra-ui/react";
-import React, { useEffect, useRef, useState } from "react";
+import {} from "cmdk";
+import { useEffect, useRef, useState } from "react";
+import Articletag from "../article/Articletag";
 import {
   Command,
   CommandEmpty,
@@ -30,8 +26,6 @@ import {
   CommandItem,
   CommandList,
 } from "../command";
-import {} from "cmdk";
-import Articletag from "../article/Articletag";
 type Props = {
   options: Tag[];
   defaultValue?: number[];
@@ -80,7 +74,7 @@ export default function TagPicker({
         onClose={onClose}
       >
         <PopoverTrigger>
-          <Button>Trigger</Button>
+          <Button>Select tag</Button>
         </PopoverTrigger>
         <PopoverContent p={3} style={{ width: "fit-content" }}>
           <PopoverBody>
@@ -98,20 +92,18 @@ export default function TagPicker({
                         key={tag.id}
                         onSelect={() => toggleOption(tag)}
                       >
-                        <Center width={"100%"} gap={3}>
+                        <Center width={"100%"} gap={3} mt={2}>
                           <CheckIcon
                             width={"20px"}
                             opacity={isActive ? "1" : 0}
                           />
                           <Box flex={"1"}>{tag.displayName ?? tag.name}</Box>
-                          <Circle size={"3"} bg={"red"}></Circle>
+                          <Circle size={"3"} bg={tag.color}></Circle>
                         </Center>
                       </CommandItem>
                     );
                   })}
                 </CommandGroup>
-
-                <CommandItem>Apple</CommandItem>
               </CommandList>
             </Command>
           </PopoverBody>

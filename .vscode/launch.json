@@ -38,5 +38,11 @@
       "cwd": "${workspaceFolder}/server",
       "console": "integratedTerminal"
     }
+  ],
+  "compounds": [
+    {
+      "name": "Debug Next.js and NestJS",
+      "configurations": ["Next.js: debug full stack", "Debug Nest Framework"]
+    }
   ]
 }
