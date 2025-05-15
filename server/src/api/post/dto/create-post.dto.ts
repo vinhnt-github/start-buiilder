@@ -3,10 +3,10 @@ import { createZodDto } from 'nestjs-zod';
 import { z } from 'zod';
 
 const PostSchema = z.object({
-  type: PostType,
+  type: PostType.optional(),
   title: z.string(),
   emoji: z.string().optional(),
-  bodyMarkdown: z.string(),
+  'body-marklang': z.string(),
   status: PostStatus,
   pinned: z.boolean().optional(),
   deleteFlag: FlagSchema.optional(),
