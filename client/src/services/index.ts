@@ -10,8 +10,21 @@ export class FetchErr extends Error {
   message: string;
   constructor(statusCode: number, message: string) {
     super(message);
+    ``;
     this.message = message;
     this.statusCode = statusCode;
+  }
+}
+export class ValidationError extends Error {
+  statusCode: number;
+  message: string;
+  fieldErrors: Record<string, string>;
+  constructor(message: string, fieldErrors: Record<string, string>) {
+    super(message);
+    ``;
+    this.statusCode = 400;
+    this.message = message;
+    this.fieldErrors = fieldErrors;
   }
 }
 
@@ -36,6 +49,10 @@ const handleError = (err: unknown) => {
     if (err.statusCode === 401) {
       // Handle unauthorized error
     }
+    if (err.statusCode === 400) {
+      throw err;
+      // Handle unauthorized error
+    }
     throw err;
   }
   throw err;
@@ -52,9 +69,7 @@ export const fetcher = async <T>(
   };
   return fetch(apiPath(url), {
     ...options,
-    headers: {
-      "x-api-user-id": session?.user?.id || "",
-    },
+    headers,
   })
     .then(handleSuccess)
     .catch(handleError);
