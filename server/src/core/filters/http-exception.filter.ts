@@ -26,10 +26,11 @@ export class HttpExceptionFilter implements ExceptionFilter {
           message: 'Unauthorized',
         });
       }
+      const statusCode = exception.getStatus ? exception.getStatus() : 500;
       const exceptionsResponse = exception.getResponse
         ? exception.getResponse()
         : exception;
-      return response.json(exceptionsResponse);
+      return response.status(statusCode).json(exceptionsResponse);
     }
   }
 }
