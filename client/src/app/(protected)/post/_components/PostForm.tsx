@@ -19,6 +19,7 @@ export default function PostForm({ tags }: Props) {
     formErrors,
     pending,
     formRef,
+    formState,
     startFormTransition,
     formAction,
   } = usePostForm();
@@ -64,7 +65,7 @@ export default function PostForm({ tags }: Props) {
               }}
             />
           </Box>
-          <Editor value="hahahah" onChange={editorChange} />
+          <Editor value={formState["body-marklang"]} onChange={editorChange} />
         </Container>
       </form>
     </FormProvider>

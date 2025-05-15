@@ -1,6 +1,6 @@
 import { POST_STATUS } from "@/lib/constants";
-import { PostPayload } from "./schema";
 import { FormError, FormStatusEnum, InitialFormState } from "@/lib/type/state";
+import { PostPayload } from "./schema";
 
 export enum POST_ACTION {
   CREATE = "CREATE",
@@ -9,7 +9,9 @@ export enum POST_ACTION {
 
 export type FormSate = InitialFormState & PostPayload & { action: string };
 
-export const initialFormState = (initForm?: PostPayload): FormSate => ({
+export const initialFormState = (
+  initForm?: Partial<PostPayload>
+): FormSate => ({
   formStatus: FormStatusEnum.INIT,
   title: "",
   slug: "",
