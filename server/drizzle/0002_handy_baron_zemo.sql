@@ -1,0 +1,1 @@
+ALTER TABLE "posts" ALTER COLUMN "delete_flag" SET DATA TYPE boolean;

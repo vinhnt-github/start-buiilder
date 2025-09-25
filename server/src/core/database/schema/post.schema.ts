@@ -9,7 +9,7 @@ import {
   timestamp,
   varchar,
 } from 'drizzle-orm/pg-core';
-import { PostStatusEnum, PostTypeEnum } from './enum';
+import { FlagEnum, PostStatusEnum, PostTypeEnum } from './enum';
 
 export const posts = pgTable('posts', {
   ...IdSerialPrimaryKey,
@@ -25,7 +25,7 @@ export const posts = pgTable('posts', {
   publishedAt: timestamp('published_at'),
   status: PostStatusEnum('status').notNull(),
   pinned: boolean('pinned').default(false),
-  deleteFlag: varchar('delete_flag'),
+  deleteFlag: FlagEnum('delete_flag'),
   authorId: integer('author_id').notNull(),
   ...UserModifine,
   ...DateModifine,

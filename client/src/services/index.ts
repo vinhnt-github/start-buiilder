@@ -8,22 +8,16 @@ export const apiPath = (url: string) =>
 export class FetchErr extends Error {
   statusCode: number;
   message: string;
-  constructor(statusCode: number, message: string) {
+  fieldErrors: Record<string, { message: string }>;
+  constructor(
+    message: string,
+    statusCode: number,
+    fieldErrors: Record<string, { message: string }>
+  ) {
     super(message);
     ``;
     this.message = message;
     this.statusCode = statusCode;
-  }
-}
-export class ValidationError extends Error {
-  statusCode: number;
-  message: string;
-  fieldErrors: Record<string, string>;
-  constructor(message: string, fieldErrors: Record<string, string>) {
-    super(message);
-    ``;
-    this.statusCode = 400;
-    this.message = message;
     this.fieldErrors = fieldErrors;
   }
 }
@@ -39,21 +33,19 @@ export type FetchResponse<T> = {
 const handleSuccess = async (res: Response) => {
   const result = await res.json();
   if (!res.ok) {
-    throw new FetchErr(res.status, result.message);
+    // If the response is not OK, throw an error with the details.
+    throw new FetchErr(
+      result.message || "An error occurred",
+      res.status,
+      result.fieldErrors || {}
+    );
   }
   return result;
 };
 
 const handleError = (err: unknown) => {
   if (err instanceof FetchErr) {
-    if (err.statusCode === 401) {
-      // Handle unauthorized error
-    }
-    if (err.statusCode === 400) {
-      throw err;
-      // Handle unauthorized error
-    }
-    throw err;
+    console.error("Fetch error log:", err);
   }
   throw err;
 };

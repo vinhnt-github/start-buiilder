@@ -6,11 +6,12 @@ import {
   Delete,
   Get,
   Param,
-  Patch,
   Post,
+  Put,
   Query,
 } from '@nestjs/common';
 import { PostDto } from './dto/create-post.dto';
+import { GetDto } from './dto/get-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { PostService } from './post.service';
 
@@ -20,8 +21,8 @@ export class PostController {
 
   @IsPublic()
   @Get()
-  findAll(@Query() query: any) {
-    return this.postService.findAll(query);
+  findAll(@Query() query: GetDto) {
+    return this.postService.findAllPublicPost(query);
   }
 
   @Post('new')
@@ -29,14 +30,14 @@ export class PostController {
     return this.postService.create(userId, createPostDto);
   }
 
+  @Put()
+  update(@Body() updatePostDto: UpdatePostDto) {
+    return this.postService.updatePostBySlug(updatePostDto.slug, updatePostDto);
+  }
+
   @Get(':slug')
   findOne(@Param('slug') slug: string) {
     return this.postService.findOneBySlug(slug);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
-    return this.postService.update(+id, updatePostDto);
   }
 
   @Delete(':id')

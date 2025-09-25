@@ -23,8 +23,11 @@ export type Article = {
   pinned: string;
   publication: string;
   publishedAt: string;
-  user: Users;
+  createAt: string;
+  createdBy: Users;
   tags: Tag[];
+  authorId: number;
+  bodyHtml: string;
 };
 
 export type Flag = "Yes" | "No";
@@ -37,4 +40,16 @@ export type Tag = {
   color: string;
 };
 
-export type PostsDetail = any;
+export type Post = {
+  id: number;
+  slug: string;
+  title: string;
+  bodyMarkdown: string;
+  bodyHtml: string;
+  status: PostStatus;
+  tags: Tag[];
+  createdBy: Users;
+  emoji?: string;
+  pinned?: boolean;
+  publishedAt?: Date | null;
+};

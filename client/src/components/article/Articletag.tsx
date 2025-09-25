@@ -12,7 +12,7 @@ type Props = {
   tag: TagProps;
 };
 
-export default function Articletag({ tag, onRemoveTag, ...props }: Props) {
+export default function ArticleTag({ tag, onRemoveTag, ...props }: Props) {
   const handleRemoveTag = (event: MouseEvent<HTMLButtonElement>) => {
     onRemoveTag?.(tag);
     event.preventDefault();

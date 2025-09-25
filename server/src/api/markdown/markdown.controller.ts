@@ -1,5 +1,6 @@
+import { PageDto } from '@/core/utils/paginator/page.dto';
 import { Body, Controller, Get, Post } from '@nestjs/common';
-import { MarkdownDto } from './dto/create-markdown.dto';
+import { MarkdownPreviewDto } from './dto/create-markdown.dto';
 import { MarkdownService } from './markdown.service';
 
 @Controller('markdown')
@@ -13,7 +14,12 @@ export class MarkdownController {
   }
 
   @Post('preview')
-  create(@Body() markdownDto: MarkdownDto) {
-    return this.markdownService.generate(markdownDto.markdownContent);
+  create(@Body() markdownDto: MarkdownPreviewDto) {
+    try {
+      const result = this.markdownService.generate(markdownDto.markdownContent);
+      return PageDto.success(result);
+    } catch (error) {
+      return PageDto.error('Invalid markdown content');
+    }
   }
 }

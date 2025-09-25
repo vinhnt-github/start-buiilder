@@ -1,18 +1,18 @@
 import { DrizzleService } from '@/core/database/drizzle.service';
 import { tags as tagSchema } from '@/core/database/schema/tag.schema';
+import { PageDto } from '@/core/utils/paginator/page.dto';
 import { Injectable } from '@nestjs/common';
 import { PostTagDto } from './dto/create-tag.dto';
-import { TagSelect } from './entities/tag.entity';
 
 @Injectable()
 export class TagService {
   constructor(private readonly drizzleService: DrizzleService) {}
-  async findAll(): Promise<TagSelect[]> {
+  async findAll() {
     const tags = await this.drizzleService.db
       .select()
       .from(tagSchema)
       .execute();
-    return tags;
+    return PageDto.success(tags);
   }
 
   async create(userId: number, tag: PostTagDto) {

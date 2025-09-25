@@ -1,5 +1,6 @@
 import { POST_STATUS } from "@/lib/constants";
 import { FormError, FormStatusEnum, InitialFormState } from "@/lib/type/state";
+import { Post } from "@/services/types";
 import { PostPayload } from "./schema";
 
 export enum POST_ACTION {
@@ -9,15 +10,14 @@ export enum POST_ACTION {
 
 export type FormSate = InitialFormState & PostPayload & { action: string };
 
-export const initialFormState = (
-  initForm?: Partial<PostPayload>
-): FormSate => ({
+export const initialFormState = (initForm?: Partial<Post>): FormSate => ({
+  id: initForm?.id,
   formStatus: FormStatusEnum.INIT,
-  title: "",
-  slug: "",
-  tags: initForm?.tags || "",
-  status: initForm?.status || POST_STATUS.init,
-  "body-marklang": initForm?.["body-marklang"] || "",
+  title: initForm?.title || "",
+  slug: initForm?.slug || "",
+  tags: initForm?.tags?.map((t) => t.id).join(",") || "",
+  status: initForm?.status || POST_STATUS.draft,
+  bodyMarkdown: initForm?.bodyMarkdown || "",
   error: null,
   message: "", // only exits when action success
   updatedAt: "",
@@ -37,3 +37,8 @@ export const handleSuccess = (prevState: FormSate, message: string) => ({
   formStatus: FormStatusEnum.SUCCESS,
   message,
 });
+
+export type PreviewSate = {
+  html: string;
+  error: string;
+};

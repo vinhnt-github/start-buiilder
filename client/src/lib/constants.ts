@@ -1,6 +1,5 @@
 export enum POST_STATUS {
   draft = "DRAFT",
-  init = "INIT",
   published = "PUBLISHED",
   deleted = "DELETED",
 }

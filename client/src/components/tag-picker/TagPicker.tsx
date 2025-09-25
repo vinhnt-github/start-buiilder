@@ -16,8 +16,8 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import {} from "cmdk";
-import { useEffect, useRef, useState } from "react";
-import Articletag from "../article/Articletag";
+import React, { useEffect, useRef, useState } from "react";
+import ArticleTag from "../article/ArticleTag";
 import {
   Command,
   CommandEmpty,
@@ -28,11 +28,11 @@ import {
 } from "../command";
 type Props = {
   options: Tag[];
-  defaultValue?: number[];
-  onChangeTagSelected?: (tagsSlected: Tag[]) => void;
+  defaultValue?: string[];
+  onChangeTagSelected?: (tagsSelected: Tag[]) => void;
 };
 
-export default function TagPicker({
+export default React.memo(function TagPicker({
   options = [],
   defaultValue,
   ...props
@@ -42,7 +42,11 @@ export default function TagPicker({
   const commandRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    setTagSlected(options.filter((t) => defaultValue?.includes(t.id)) || []);
+    const _tagSelected = options.filter((t) =>
+      defaultValue?.includes(t.id.toString())
+    );
+    console.log("_tagSelected", _tagSelected);
+    setTagSlected(_tagSelected);
   }, [defaultValue, options]);
 
   const toggleOption = (currentTag: Tag) => {
@@ -111,9 +115,9 @@ export default function TagPicker({
       </Popover>
       <Wrap my={4} justify={"flex-end"}>
         {tagSelected.map((t) => (
-          <Articletag key={t.id} tag={t} onRemoveTag={handleUnSelectTag} />
+          <ArticleTag key={t.id} tag={t} onRemoveTag={handleUnSelectTag} />
         ))}
       </Wrap>
     </Center>
   );
-}
+});

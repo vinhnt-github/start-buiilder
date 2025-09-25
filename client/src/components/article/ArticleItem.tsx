@@ -1,7 +1,7 @@
 import { Article } from "@/services/types";
 import { Avatar, Box, Center, Heading, Text, Wrap } from "@chakra-ui/react";
 import Link from "next/link";
-import Articletag from "./Articletag";
+import ArticleTag from "./ArticleTag";
 import TimeDistance from "./TimeDistance";
 
 type Props = Article;
@@ -16,7 +16,7 @@ export default function ArticleItem({ title, tags, slug, ...article }: Props) {
       </Link>
       <Wrap my={3} spacing="5px">
         {tags?.map((t, i) => (
-          <Articletag key={t.id} tag={t} />
+          <ArticleTag key={t.id} tag={t} />
         ))}
       </Wrap>
       <Center gap={2} justifyContent={"start"}>

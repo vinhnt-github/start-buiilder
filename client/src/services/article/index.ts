@@ -1,6 +1,7 @@
+import { tagCache } from "@/lib/cache/tags";
 import { fetcher } from "@/services";
 import { ParseOptions } from "querystring";
-import { Article } from "../types";
+import { Article, Post } from "../types";
 
 export const getAllArticle = async (param?: ParseOptions) => {
   return fetcher<Article[]>("/post", {
@@ -27,11 +28,20 @@ export const postNewArticle = async (data: any) => {
 };
 
 export const putEditArticleBySlug = async (data: any) => {
-  console.log("data", data);
+  return fetcher(`/post`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
 };
 
 export const getArticleBySlug = async (slug: string, param?: ParseOptions) => {
-  return fetcher(`/post/${slug}`, {
+  return fetcher<Post>(`/post/${slug}`, {
     method: "GET",
+    next: {
+      tags: tagCache.getPostDetail(slug),
+    },
   });
 };

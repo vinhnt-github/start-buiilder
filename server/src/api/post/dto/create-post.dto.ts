@@ -2,15 +2,15 @@ import { FlagSchema, PostStatus, PostType } from '@/core/database/schema/type';
 import { createZodDto } from 'nestjs-zod';
 import { z } from 'zod';
 
-const PostSchema = z.object({
+export const PostSchema = z.object({
   type: PostType.optional(),
   title: z.string(),
   emoji: z.string().optional(),
-  'body-marklang': z.string(),
+  bodyMarkdown: z.string(),
   status: PostStatus,
   pinned: z.boolean().optional(),
   deleteFlag: FlagSchema.optional(),
-  tags: z.array(z.number()),
+  tags: z.string().optional(),
 });
 
 export class PostDto extends createZodDto(PostSchema) {}

@@ -1,5 +1,4 @@
 export enum POST_STATUS {
-  INIT = 'INIT',
   PUBLISHED = 'PUBLISHED',
   DRAFT = 'DRAFT',
   DELETED = 'DELETED',

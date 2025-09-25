@@ -5,6 +5,6 @@ import { PostService } from '../post/post.service';
 export class ExploreService {
   constructor(private readonly postService: PostService) {}
   getArticleByTag(tagName: string) {
-    return this.postService.findAll({ tagName: tagName });
+    return this.postService.findAllPublicPost({ tagName: tagName });
   }
 }

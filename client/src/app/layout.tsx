@@ -1,8 +1,9 @@
-import type { Metadata } from "next";
-import { ThemeProvider } from "@/components/providers/ThemeProvider";
-import { ColorModeScript } from "@chakra-ui/react";
-import theme, { colorMode } from "@/lib/theme";
 import AuthProvider from "@/components/providers/AuthProvider";
+import { ThemeProvider } from "@/components/providers/ThemeProvider";
+import { colorMode } from "@/lib/theme";
+import { ColorModeScript } from "@chakra-ui/react";
+import type { Metadata } from "next";
+import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Start builder",

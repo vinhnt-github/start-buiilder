@@ -19,7 +19,8 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "dbgenerate": "drizzle-kit generate --config=./drizzle.config.ts",
-    "dbpush": "drizzle-kit push --config=./drizzle.config.ts"
+    "dbpush": "drizzle-kit push --config=./drizzle.config.ts",
+    "drizzle-studio": "npx drizzle-kit studio"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
@@ -31,8 +32,10 @@
     "cd": "^0.3.3",
     "drizzle-orm": "^0.33.0",
     "drizzle-zod": "^0.5.1",
+    "highlightjs-cypher": "^1.2.0",
     "joi": "^17.13.3",
     "markdown-it": "^14.1.0",
+    "markdown-it-highlightjs": "^4.2.0",
     "nestjs-zod": "^3.0.0",
     "pg": "^8.12.0",
     "reflect-metadata": "^0.2.0",

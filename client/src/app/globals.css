@@ -1,1 +1,106 @@
 @import "tailwindcss";
+
+/* custom styles */
+
+:is([data-theme="dark"]),
+:is([data-theme="dark"]) {
+  --hljs-background: #282c34;
+  --hljs-color: #abb2bf;
+  --hljs-comment: #5c6370;
+  --hljs-keyword: #c678dd;
+  --hljs-section: #e06c75;
+  --hljs-literal: #56b6c2;
+  --hljs-string: #98c379;
+  --hljs-variable: #d19a66;
+  --hljs-link: #61aeee;
+  --hljs-class: #e6c07b;
+}
+
+code {
+  font-family: var(--font-jetbrains-mono);
+  color: var(--chakra-colors-hljs-text);
+  background: var(--chakra-colors-hljs-background);
+  padding: 0 0.4em;
+}
+
+pre code.hljs {
+  display: block;
+  border-radius: var(--radius-4);
+  overflow-x: auto;
+  padding: 1em;
+}
+
+.hljs {
+  color: var(--hljs-color);
+  background: var(--hljs-background);
+}
+
+.hljs-comment,
+.hljs-quote {
+  color: var(--hljs-comment);
+  font-style: italic;
+}
+
+.hljs-doctag,
+.hljs-keyword,
+.hljs-formula {
+  color: var(--hljs-keyword);
+}
+
+.hljs-section,
+.hljs-name,
+.hljs-selector-tag,
+.hljs-deletion,
+.hljs-subst {
+  color: var(--hljs-section);
+}
+
+.hljs-literal {
+  color: var(--hljs-literal);
+}
+
+.hljs-string,
+.hljs-regexp,
+.hljs-addition,
+.hljs-attribute,
+.hljs-meta .hljs-string {
+  color: var(--hljs-string);
+}
+
+.hljs-attr,
+.hljs-variable,
+.hljs-template-variable,
+.hljs-type,
+.hljs-selector-class,
+.hljs-selector-attr,
+.hljs-selector-pseudo,
+.hljs-number {
+  color: var(--hljs-variable);
+}
+
+.hljs-symbol,
+.hljs-bullet,
+.hljs-link,
+.hljs-meta,
+.hljs-selector-id,
+.hljs-title {
+  color: var(--hljs-link);
+}
+
+.hljs-built_in,
+.hljs-title.class_,
+.hljs-class .hljs-title {
+  color: var(--hljs-class);
+}
+
+.hljs-emphasis {
+  font-style: italic;
+}
+
+.hljs-strong {
+  font-weight: bold;
+}
+
+.hljs-link {
+  text-decoration: underline;
+}

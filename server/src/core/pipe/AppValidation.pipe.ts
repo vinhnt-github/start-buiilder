@@ -7,9 +7,10 @@ export const AppValidationPipe = createZodValidationPipe({
   createValidationException: (error: ZodError) =>
     new HttpException(
       {
+        message: 'Validation failed xxxx',
         statusCode: HttpStatus.BAD_REQUEST,
         fieldErrors: Object.fromEntries(
-          error.issues.map(({ path, message }) => [path[0], message]),
+          error.issues.map(({ path, message }) => [path[0], { message }]),
         ),
       },
       HttpStatus.BAD_REQUEST,

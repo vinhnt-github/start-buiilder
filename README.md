@@ -20,8 +20,8 @@
 
 ### Public
 
-- [ ] / => Home Page
-- [ ] /auth/login => Login page
+- [x] / => Home Page
+- [x] /auth/login => Login page
 - [ ] /search => Search page
 - [ ] /username => User detail
 - [ ] /username/postSlug => Post view
@@ -35,7 +35,9 @@
 
 - [ ] /dashboard => list posts
 - [ ] /dashboard/setting => setting user
-- [ ] /posts/new/ => new post
+- [x] /posts/new/ => new post
+  - [x] create
+  - [x] preview
 - [ ] /posts/postSlug/ => preview post
 - [ ] /posts/postSlug/edit/ => edit post
 - [ ] /admin/ => admin page
@@ -51,3 +53,14 @@
 
 - [ ] FEAT Report
 - [ ] FEAT Send mail
+
+## How to start?
+
+- `Database` and `Authentication service`
+  Run docker `cd docker` `docker compose up -d`
+
+- server
+  `cd server` `npm run start:debug`
+
+- Drizzle studio
+  `npx drizzle-kit studio`

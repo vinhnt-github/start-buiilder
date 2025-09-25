@@ -1,4 +1,4 @@
-import ArticleTag from "@/components/article/ArticleTag";
+import Articletag from "@/components/article/ArticleTag";
 import { getDistanceTimeToNow } from "@/lib/date-time";
 import { getArticleBySlug } from "@/services/article";
 import {
@@ -7,6 +7,8 @@ import {
   Divider,
   Flex,
   Heading,
+  HStack,
+  Tag,
   Text,
   Wrap,
 } from "@chakra-ui/react";
@@ -32,9 +34,20 @@ export default async function Page({
           {article.title}
         </Heading>
 
+        {/* Tags section */}
+        {article.tags && (
+          <HStack spacing={2} mb={6}>
+            {article.tags.map((tag) => (
+              <Tag key={tag.id} color={tag.color} size="md">
+                {tag.name}
+              </Tag>
+            ))}
+          </HStack>
+        )}
+
         <Wrap my={4} justify={"flex-end"}>
           {article.tags.map((t) => (
-            <ArticleTag key={t.id} tag={t}></ArticleTag>
+            <Articletag key={t.id} tag={t}></Articletag>
           ))}
         </Wrap>
       </Box>

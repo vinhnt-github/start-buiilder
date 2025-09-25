@@ -1,12 +1,17 @@
 "use client";
 
-import React from "react";
-import { Button, Switch, Center, Text, Box, FormLabel } from "@chakra-ui/react";
-import { ArrowBackIcon } from "@chakra-ui/icons";
 import HeaderWrapper from "@/components/header/HeaderWrapper";
 import RouteBack from "@/components/RouteBack";
-import { useFormContext } from "react-hook-form";
 import { POST_STATUS } from "@/lib/constants";
+import {
+  Button,
+  Center,
+  Flex,
+  FormLabel,
+  Switch,
+  useColorModeValue,
+} from "@chakra-ui/react";
+import { useFormContext } from "react-hook-form";
 
 type Props = {
   loading: boolean;
@@ -16,7 +21,17 @@ function PostHeader(props: Props) {
   const { register, setValue } = useFormContext();
   return (
     <HeaderWrapper>
-      <Center justifyContent={"space-between"}>
+      <Flex
+        py={2}
+        px={4}
+        position="sticky"
+        top={0}
+        zIndex={1}
+        bg={useColorModeValue("white", "gray.800")}
+        borderBottomWidth="1px"
+        justify="space-between"
+        align="center"
+      >
         <RouteBack />
         <Center gap={4}>
           <Center gap={2}>
@@ -38,7 +53,7 @@ function PostHeader(props: Props) {
             {props.loading ? "Saving" : "Save"}
           </Button>
         </Center>
-      </Center>
+      </Flex>
     </HeaderWrapper>
   );
 }

@@ -1,5 +1,6 @@
 "use client";
 
+import { useColorMode } from "@chakra-ui/react";
 import {
   defaultKeymap,
   history,
@@ -29,7 +30,6 @@ import React, {
   useState,
 } from "react";
 import { getEditorTheme } from "./themes";
-import { useColorMode } from "@chakra-ui/react";
 
 export type EditorRefType = HTMLDivElement & {
   appendImageUrl: (urlString: string) => void;
@@ -96,6 +96,8 @@ export const Editor = React.forwardRef<EditorRefType, EditorProps>(
         extensions: [
           extensionsRef as Extension[],
           EditorView.updateListener.of((v: ViewUpdate) => {
+            console.log(v.state.doc.toString());
+
             if (v.docChanged) {
               onChange(v.state.doc.toString());
             }
@@ -130,7 +132,16 @@ export const Editor = React.forwardRef<EditorRefType, EditorProps>(
       }
     }, [value, editorView]);
 
-    return <div className="" ref={editorRef}></div>;
+    return (
+      <div
+        className="bg-[#282c34]"
+        ref={editorRef}
+        style={{
+          height: "500px",
+          minHeight: "500px",
+        }}
+      ></div>
+    );
   }
 );
 

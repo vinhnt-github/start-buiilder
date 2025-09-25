@@ -6,7 +6,7 @@ export const postSchema = z.object({
   title: z.string().min(5, {
     message: "Title is required.",
   }),
-  "body-marklang": z.string(),
+  bodyMarkdown: z.string(),
   tags: z.string(),
   status: z.string(),
 });

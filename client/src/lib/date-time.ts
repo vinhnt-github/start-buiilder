@@ -8,8 +8,8 @@ import {
 export const getDistanceTimeToNow = (date: string) => {
   if (!isDate(new Date(date))) return "";
 
-  const diffInHour = differenceInHours(date, Date.now());
+  const diffInHour = differenceInHours(new Date(date), Date.now());
 
-  if (diffInHour > 24) return format(date, "ii LLL");
+  if (Math.abs(diffInHour) > 24) return format(new Date(date), "dd/MM/yyyy");
   return formatDistanceToNow(date);
 };

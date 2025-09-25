@@ -25,7 +25,7 @@ export class TransformInterceptor<T>
       // logic after router handle called and response to client
       map((data) => ({
         statusCode: context.switchToHttp().getResponse().statusCode,
-        data,
+        ...data,
       })),
     );
   }

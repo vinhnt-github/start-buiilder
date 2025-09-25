@@ -1,4 +1,5 @@
 import useToast from "@/lib/hooks/useToast";
+import { Post } from "@/services/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { redirect } from "next/navigation";
 import { useEffect, useRef, useTransition } from "react";
@@ -6,41 +7,70 @@ import { useFormState } from "react-dom";
 import { useForm } from "react-hook-form";
 import { createPostAction } from "./action";
 import { postSchema } from "./schema";
-import { initialFormState } from "./state";
+import { initialFormState, POST_ACTION } from "./state";
 
-const usePostForm = () => {
+/**
+ * Custom hook for managing post form state and submissions
+ * @returns {Object} Form utilities and state
+ * @property {UseFormReturn} form - React Hook Form instance
+ * @property {Object} formState - Current form state including errors and messages
+ * @property {Object} formErrors - Form validation errors
+ * @property {React.RefObject<HTMLFormElement>} formRef - Reference to form element
+ * @property {boolean} pending - Indicates if form submission is in progress
+ * @property {Function} startFormTransition - Function to start form transition
+ * @property {Function} formAction - Server action for form submission
+ */
+
+type UsePostFormProps = {
+  postData?: Post;
+};
+
+const usePostForm = ({ postData }: UsePostFormProps) => {
   const toast = useToast();
-
   const formRef = useRef<HTMLFormElement>(null);
+
+  /** Transition state for managing UI updates during form submission */
   const [pending, startFormTransition] = useTransition();
+
+  /** Form state management with server actions */
   const [state, formAction, isPending] = useFormState(
     createPostAction,
-    initialFormState()
+    initialFormState(postData)
   );
-  const { error, message, updatedAt, action, ...initialForm } = state;
+  console.log("state", state);
 
+  const {
+    error: formStateError,
+    message,
+    updatedAt,
+    action,
+    ...initialForm
+  } = state;
+
+  /** Initialize form with Zod validation */
   const form = useForm({
     resolver: zodResolver(postSchema),
     defaultValues: initialForm,
   });
 
+  /** Extract form errors from form state */
   const {
     formState: { errors: formErrors },
   } = form;
 
-  useEffect(() => {
-    // Handle validation errors from the client
-    if (formErrors.title) {
-      toast.error({ message: formErrors.title.message as string });
-    }
-  }, [form, formErrors]);
+  /** Handle server-side errors */
 
-  console.log("error", error);
   useEffect(() => {
-    //handle API call success
+    if (formStateError) {
+      toast.success({ message: formStateError.message });
+    }
+  }, [formStateError]);
+
+  /** Handle successful form submission */
+  useEffect(() => {
     if (updatedAt && message) {
       toast.success({ message });
-      if (action === "NEW") {
+      if (action === POST_ACTION.CREATE) {
         redirect("/");
       }
     }
@@ -56,4 +86,5 @@ const usePostForm = () => {
     formAction,
   };
 };
+
 export default usePostForm;

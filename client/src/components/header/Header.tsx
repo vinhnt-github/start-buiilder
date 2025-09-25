@@ -1,10 +1,9 @@
-import { Box, Flex, VStack } from "@chakra-ui/react";
-import React from "react";
-import MenuLink from "./MenuLink";
-import Logo from "./Logo";
-import UserStatus from "./UserStatus";
-import ToggleTheme from "./ToggleTheme";
+import { Flex } from "@chakra-ui/react";
 import HeaderWrapper from "./HeaderWrapper";
+import Logo from "./Logo";
+import MenuLink from "./MenuLink";
+import ToggleTheme from "./ToggleTheme";
+import UserStatus from "./UserStatus";
 
 export default function Header() {
   return (
